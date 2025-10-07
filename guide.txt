@@ -1,0 +1,24 @@
+-------> the user would be given a list of common goals or can also enter a custom goal
+-------> the user would enter a timeline for achieving these goals
+-------> the user would the choose frequency for doing these habits per week
+-------> after that, the LLM would create a detailed plan for the user goal achievement
+-------> these would be the actual habits that would be in checkboxes that the user has to complete
+-------> the user's habit pattern i.e how he completes these tasks would be recorded in the appropriate database tables
+-------> the UI dashboard would then reflect the habit patterns
+-------> at the same time, notifications and emails would be sent to users to serve as reminders
+
+
+ROUTES WOULD BE:
+    / :-> landing page
+    /auth :-> everything authentication
+    /onboarding :-> initial user questions like: what are your goals?
+    /dashboard :-> user habit pattern and overall user rewards, how closer user is to goal
+    /tasks :-> daily, weekly tasks alongside verification, user rewards 
+
+/onboarding:
+-------> user a given a list of goals he's trying to achieve, can also enter a custom goal
+-------> LLM breaks it down to actionable habits within a specific timeline provided by user, if complex
+-------> user can edit it manually and override LLM generated habits
+-------> habits and goals are stored in database and user is redirected to /tasks where today's tasks are viewed
+/tasks:
+------->

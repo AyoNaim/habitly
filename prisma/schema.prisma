@@ -1,0 +1,69 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model Profile {
+  id          String   @id @db.Uuid
+  displayName String?
+  timezone    String   @default("UTC")
+  nudgeStyle  String   @default("casual")
+  xp          Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  // Relations
+  habits Habit[]
+
+  @@map("profiles") // tells Prisma to map to the SQL table `profiles`
+}
+
+model Habit {
+  id          String      @id @default(uuid()) @db.Uuid
+  userId      String      @db.Uuid
+  title       String
+  description String?
+  frequency   String
+  createdAt   DateTime    @default(now())
+
+  // Relations
+  user   Profile   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  logs   HabitLog[]
+  nudges Nudge[]
+
+  @@map("habits")
+}
+
+model HabitLog {
+  id        String   @id @default(uuid()) @db.Uuid
+  habitId   String   @db.Uuid
+  completed Boolean  @default(false)
+  loggedAt  DateTime @default(now())
+
+  // Relations
+  habit Habit @relation(fields: [habitId], references: [id], onDelete: Cascade)
+
+  @@map("habit_logs")
+}
+
+model Nudge {
+  id        String   @id @default(uuid()) @db.Uuid
+  habitId   String   @db.Uuid
+  message   String
+  sentAt    DateTime @default(now())
+
+  habit Habit @relation(fields: [habitId], references: [id], onDelete: Cascade)
+
+  @@map("nudges")
+}
