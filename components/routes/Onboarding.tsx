@@ -141,7 +141,7 @@ const Onboarding = () => {
                 variant={'secondary'}
                 size={'lg'}
                 onClick={() => setToggleInput(!toggleInput)}
-                className={`h-12 md:h-14 rounded-3xl text-md md:text-xl font-medium tracking-tight cursor-pointer bg-green-400 ${GeistMono.className}`}
+                className={`h-12 md:h-14 rounded-5xl text-md md:text-xl font-medium tracking-tight cursor-pointer bg-green-400 ${GeistMono.className}`}
               >
                 Enter your own custom habit
               </Button>
