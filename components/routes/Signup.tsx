@@ -80,7 +80,7 @@ export default function Signup() {
                                 <div className='w-full'>
                                     <Button variant={'default'} type='submit' className='w-full rounded-3xl cursor-pointer'><p>Sign Up</p></Button>
                                 </div>
-                                <div>Already have an account? <Link href={'./login'} className='text-green-400'>Log in</Link></div>
+                                <div className='text-sm'>Already have an account? <Link href={'./login'} className='text-green-400'>Log in</Link></div>
                             </form>
                         </div>
                     </div>

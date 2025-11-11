@@ -33,7 +33,8 @@ model Habit {
   id          String      @id @default(uuid()) @db.Uuid
   userId      String      @db.Uuid
   title       String
-  description String?
+  timezone    String
+  emoji       String?
   frequency   String
   createdAt   DateTime    @default(now())
 

@@ -8,25 +8,36 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel"
+import HabitsCard from "./HabitsCard";
 
-export function RoutineCarousel() {
+interface TaskProps {
+  emoji: string,
+  title: string,
+  time: string,
+  frequency: string
+}
+
+export function RoutineCarousel({ emoji, title, time, frequency }: TaskProps) {
+  
+  const [isChecked, setisChecked] = React.useState(true);
+  
+  const handleCheckboxValue = (e: React.FormEvent) => {
+    setisChecked(!isChecked)
+  }
+
   return (
     <Carousel className="w-full max-w-xs">
       <CarouselContent>
         {Array.from({ length: 5 }).map((_, index) => (
           <CarouselItem key={index}>
             <div className="p-1">
-              <Card>
-                <CardContent className="flex aspect-square items-center justify-center p-5">
-                  <span className="text-4xl font-semibold">Routine</span>
-                </CardContent>
-              </Card>
+              <HabitsCard emoji="read" title="Read a book" time="08:00" frequency="3x a week" />
             </div>
           </CarouselItem>
         ))}
       </CarouselContent>
-      <CarouselPrevious className="left-[-15px] w-12 h-12 border border-black"/>
-      <CarouselNext className="right-[-15px] w-12 h-12 border border-black"/>
+      <CarouselPrevious className="left-[-15px] w-12 h-12 border border-black" />
+      <CarouselNext className="right-[-15px] w-12 h-12 border border-black" />
     </Carousel>
   )
 }
