@@ -4,6 +4,8 @@ import { GeistMono } from '@/lib/utils'
 import { getDate, getGreeting } from '@/lib/utils'
 import Toggle from '../Toggle';
 import TaskList from '../TaskList';
+import { AddHabit } from '../AddHabit';
+import { useRouter } from 'next/navigation';
 
 interface DateProps {
   date: string;
@@ -15,8 +17,18 @@ export default function Plan() {
   const [selectedDay, setselectedDay] = useState<DateProps>({date: new Date().getDate().toString().padStart(2, "0"), day: new Date().getDay().toString(), month: new Date().getMonth().toString()});
   const [daysOfWeek, setDaysOfWeek] = useState<DateProps[]>([]);
   const [toggleView, setToggleView] = useState(true);
+  const [open, setOpen] = useState(false);
   const greeting = getGreeting();
   const date = getDate();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (open) {
+      router.push(`/plan?open=${open}`)
+    } else {
+      router.push('/plan')
+    }
+  }, [open]);
 
   useEffect(() => {
     const generateCurrentWeekdays = () => {
@@ -56,7 +68,7 @@ export default function Plan() {
 
 
 return (
-  <div className="w-screen h-screen flex justify-center items-center">
+  <div className="w-screen h-screen flex justify-center items-center relative">
     <div className="w-11/12 h-11/12 flex flex-col gap-7">
       {/* Navbar */}
       <div className="h-16 w-full flex justify-between">
@@ -94,7 +106,6 @@ return (
         <div className="relative w-full h-full">
 
           {/* Keep both components in place to prevent layout jump */}
-
           <div
             className={`transition-all duration-500 ${
               toggleView
@@ -104,6 +115,7 @@ return (
           >
             <Toggle />
           </div>
+
           <div
             className={`transition-all duration-500 justify-center items-center ${
               toggleView
@@ -114,11 +126,9 @@ return (
             <TaskList />
           </div>
 
-
           {/* Redesigned Toggle Button */}
           <div className="absolute right-6 top-6">
             <div className="flex bg-gray-100 rounded-full shadow-sm border border-gray-300 overflow-hidden">
-              {/* Carousel View */}
               <button
                 onClick={() => setToggleView(true)}
                 className={`flex items-center justify-center w-10 h-10 transition-all ${
@@ -126,7 +136,6 @@ return (
                     ? "bg-black text-white"
                     : "bg-transparent text-gray-500"
                 }`}
-                aria-label="Carousel View"
               >
                 <img
                   src="/horizontal.svg"
@@ -137,7 +146,6 @@ return (
                 />
               </button>
 
-              {/* List View */}
               <button
                 onClick={() => setToggleView(false)}
                 className={`flex items-center justify-center w-10 h-10 transition-all ${
@@ -145,7 +153,6 @@ return (
                     ? "bg-black text-white"
                     : "bg-transparent text-gray-500"
                 }`}
-                aria-label="List View"
               >
                 <img
                   src="/vertical.svg"
@@ -160,6 +167,33 @@ return (
         </div>
       </div>
     </div>
+
+    {/* ------------------------------------------------------ */}
+    {/* ⭐ Fancy Add Habit Button */}
+    {/* ------------------------------------------------------ */}
+    <AddHabit open={open} onOpenChange={setOpen} />
+    <button
+      className="
+        fixed bottom-10 right-10
+        w-16 h-16 rounded-full
+        bg-black text-white
+        flex justify-center items-center
+        shadow-xl
+        backdrop-blur-md
+        transition-all duration-300
+        hover:scale-110 hover:shadow-2xl
+        active:scale-95
+      "
+      aria-label='Add Habit'
+      onClick={() => setOpen(true)}
+    >
+      <img
+        src='/plus.svg'
+        alt='add'
+        className="w-7 h-7 invert transition-all group-hover:rotate-90"
+      />
+    </button>
+    {/* ------------------------------------------------------ */}
   </div>
 );
 }

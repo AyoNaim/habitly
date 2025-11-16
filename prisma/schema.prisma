@@ -6,14 +6,13 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../app/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
-
 
 model Profile {
   id          String   @id @db.Uuid
@@ -30,16 +29,16 @@ model Profile {
 }
 
 model Habit {
-  id          String      @id @default(uuid()) @db.Uuid
-  userId      String      @db.Uuid
-  title       String
-  timezone    String
-  emoji       String?
-  frequency   String
-  createdAt   DateTime    @default(now())
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @db.Uuid
+  title     String
+  timezone  String
+  emoji     String?
+  frequency String
+  createdAt DateTime @default(now())
 
   // Relations
-  user   Profile   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user   Profile    @relation(fields: [userId], references: [id], onDelete: Cascade)
   logs   HabitLog[]
   nudges Nudge[]
 
@@ -59,10 +58,10 @@ model HabitLog {
 }
 
 model Nudge {
-  id        String   @id @default(uuid()) @db.Uuid
-  habitId   String   @db.Uuid
-  message   String
-  sentAt    DateTime @default(now())
+  id      String   @id @default(uuid()) @db.Uuid
+  habitId String   @db.Uuid
+  message String
+  sentAt  DateTime @default(now())
 
   habit Habit @relation(fields: [habitId], references: [id], onDelete: Cascade)
 
