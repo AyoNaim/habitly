@@ -1,16 +1,10 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
 
@@ -21,26 +15,22 @@ model Profile {
   nudgeStyle  String   @default("casual")
   xp          Int      @default(0)
   createdAt   DateTime @default(now())
+  habits      Habit[]
 
-  // Relations
-  habits Habit[]
-
-  @@map("profiles") // tells Prisma to map to the SQL table `profiles`
+  @@map("profiles")
 }
 
 model Habit {
-  id        String   @id @default(uuid()) @db.Uuid
-  userId    String   @db.Uuid
+  id        String     @id @default(uuid()) @db.Uuid
+  userId    String     @db.Uuid
   title     String
   timezone  String
   emoji     String?
   frequency String
-  createdAt DateTime @default(now())
-
-  // Relations
-  user   Profile    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  logs   HabitLog[]
-  nudges Nudge[]
+  createdAt DateTime   @default(now())
+  logs      HabitLog[]
+  user      Profile    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  nudges    Nudge[]
 
   @@map("habits")
 }
@@ -50,9 +40,7 @@ model HabitLog {
   habitId   String   @db.Uuid
   completed Boolean  @default(false)
   loggedAt  DateTime @default(now())
-
-  // Relations
-  habit Habit @relation(fields: [habitId], references: [id], onDelete: Cascade)
+  habit     Habit    @relation(fields: [habitId], references: [id], onDelete: Cascade)
 
   @@map("habit_logs")
 }
@@ -62,8 +50,7 @@ model Nudge {
   habitId String   @db.Uuid
   message String
   sentAt  DateTime @default(now())
-
-  habit Habit @relation(fields: [habitId], references: [id], onDelete: Cascade)
+  habit   Habit    @relation(fields: [habitId], references: [id], onDelete: Cascade)
 
   @@map("nudges")
 }

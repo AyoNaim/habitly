@@ -19,9 +19,9 @@ interface HabitProps {
 }
 
 export function AddHabit({ open, onOpenChange }: HabitProps) {
-  const [title, setTitle] = useState('');
-  const [timezone, setTimezone] = useState('');
-  const [frequency, setFrequency] = useState('');
+  const [title, setTitle] = useState('learn spanish');
+  const [timezone, setTimezone] = useState('UTC');
+  const [frequency, setFrequency] = useState('twice a week');
   const [loading, setloading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -37,6 +37,7 @@ export function AddHabit({ open, onOpenChange }: HabitProps) {
 
     if (!res.ok) {
       alert("Error adding habit");
+      setloading(false);
       return;
     }
 
