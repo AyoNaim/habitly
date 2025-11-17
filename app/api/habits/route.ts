@@ -5,7 +5,7 @@ export async function POST(req: Request) {
     try {
         console.log("API HIT");
 
-        console.log("DATABASE_URL =>", process.env.DATABASE_URL)
+        // console.log("DATABASE_URL =>", process.env.DATABASE_URL)
 
         const { title, timezone, frequency } = await req.json();
 

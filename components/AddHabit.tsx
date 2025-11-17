@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { GeistMono } from "@/lib/utils"
 import React, { useState } from "react"
 
 interface HabitProps {
@@ -19,10 +20,13 @@ interface HabitProps {
 }
 
 export function AddHabit({ open, onOpenChange }: HabitProps) {
+  const FREQUENCIES = ['daily', 'every two days', 'once a week', 'twice a week']
+
   const [title, setTitle] = useState('learn spanish');
   const [timezone, setTimezone] = useState('UTC');
-  const [frequency, setFrequency] = useState('twice a week');
+  const [frequency, setFrequency] = useState('daily');
   const [loading, setloading] = useState(false);
+
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -43,7 +47,7 @@ export function AddHabit({ open, onOpenChange }: HabitProps) {
 
     const habit = await res.json();
     console.log("Habit created:", habit);
-
+    alert("added habit successfully!")
     setloading(false)
     // Optional: close modal after saving
     onOpenChange(false);
@@ -56,38 +60,53 @@ export function AddHabit({ open, onOpenChange }: HabitProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
-            <DialogTitle>Add Habit</DialogTitle>
+            <DialogTitle className={`text-center text-3xl ${GeistMono.className}`}>New Habit</DialogTitle>
           </DialogHeader>
 
           <DialogDescription>
 
           </DialogDescription>
-        <form onSubmit={handleSubmit}>
-          <div className="grid gap-4">
-            <div className="grid gap-3">
-              <Label htmlFor="title">Title</Label>
-              <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} />
-            </div>
+          <form>
+            <div className="flex justify-center items-center">
+              <div className="flex flex-col gap-3 justify-between items-center w-full">
+                <div className='grid gap-2 w-9/12'>
+                  <label htmlFor='habit text-sm'>habit</label>
+                  <Input name='habit' placeholder='enter your habit' value={title} onChange={(e) => setTitle(e.target.value)}/>
+                </div>
 
-            <div className="grid gap-3">
-              <Label htmlFor="timezone">Timezone</Label>
-              <Input id="timezone" value={timezone} onChange={(e) => setTimezone(e.target.value)} />
-            </div>
+                <div className='grid gap-2 w-9/12'>
+                  <label htmlFor='timezone text-sm'>timezone</label>
+                  <Input name='timezone' placeholder='enter your time zone' value={timezone} onChange={(e) => setTimezone(e.target.value)}/>
+                </div>
 
-            <div className="grid gap-3">
-              <Label htmlFor="frequency">Frequency</Label>
-              <Input id="frequency" value={frequency} onChange={(e) => setFrequency(e.target.value)} />
-            </div>
-          </div>
+                <div className='flex flex-col gap-5 w-10/12'>
+                  <p className={`text-md text-center ${GeistMono.className}`}>
+                    How often do you want to do this?
+                  </p>
+                  
+                  <div className="flex gap-3 flex-wrap justify-center">
+                    {
+                      FREQUENCIES.map((freq) => (
+                        <Button
+                          key={freq}
+                          // onClick={() => setFrequency(freq)}
+                          variant={frequency === freq ? 'default' : 'secondary'}
+                          className={`rounded-3xl px-4 py-2 text-sm ${GeistMono.className}`}
+                        >
+                            {freq}
+                          </Button>
+                      ))
+                    }
+                  </div>
 
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
-            </DialogClose>
-            <Button type="submit" className="cursor-pointer">{loading ? 'saving...' : 'Save changes'}</Button>
-          </DialogFooter>
+                  <div className='flex flex-col gap-2'>
+                    <p className={`${GeistMono.className}`}>Illustration selection</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </form>
         </DialogContent>
     </Dialog>
