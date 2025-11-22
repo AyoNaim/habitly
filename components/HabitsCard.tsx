@@ -1,5 +1,7 @@
 import * as React from "react"
 import { Card, CardContent } from "@/components/ui/card"
+import { EditHabit } from "./EditHabit"
+import { DialogDemo } from "./test";
 
 interface TaskProps {
     emoji: string,

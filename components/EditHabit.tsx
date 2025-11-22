@@ -18,17 +18,24 @@ import { toast } from "sonner"
 
 interface HabitProps {
     open: boolean,
-    onOpenChange: React.Dispatch<React.SetStateAction<boolean>>
+    onOpenChange: React.Dispatch<React.SetStateAction<boolean>>,
+    habitId: string,
+    initialData?: {
+      title: string,
+      timezone: string,
+      frequency: string,
+      imageUrl: string | null
+    }
 }
 
-export function AddHabit({ open, onOpenChange }: HabitProps) {
+export function EditHabit({ open, onOpenChange, initialData, habitId='' }: HabitProps) {
   const FREQUENCIES = ['daily', 'every two days', 'once a week', 'twice a week']
 
-  const [title, setTitle] = useState('learn spanish');
-  const [timezone, setTimezone] = useState('UTC');
-  const [frequency, setFrequency] = useState('daily');
+  const [title, setTitle] = useState(initialData?.title || '');
+  const [timezone, setTimezone] = useState(initialData?.timezone || 'UTC');
+  const [frequency, setFrequency] = useState(initialData?.frequency || 'daily');
   const [loading, setloading] = useState(false);
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [imageUrl, setImageUrl] = useState<string | null>(initialData?.imageUrl|| null);
 
   // const fileInputRef = useRef<HTMLInputElement | null >(null)
 
@@ -37,21 +44,21 @@ export function AddHabit({ open, onOpenChange }: HabitProps) {
 
     setloading(true);
 
-    const res = await fetch("/api/habits", {
-      method: "POST",
+    const res = await fetch('/api/editHabit', {
+      method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title, timezone, frequency, imageUrl }),
+      body: JSON.stringify({habitId, title, timezone, frequency, imageUrl }),
     });
 
     if (!res.ok) {
-      alert("Error adding habit");
+      toast.error("Error updating habit");
       setloading(false);
       return;
     }
 
     const habit = await res.json();
-    console.log("Habit created:", habit);
-    toast.success("habit added successfully!");
+    console.log("Habit updated:", habit);
+    toast.success("habit updated successfully!");
     // alert("added habit successfully!")
     setloading(false)
     // Optional: close modal after saving
@@ -89,10 +96,10 @@ export function AddHabit({ open, onOpenChange }: HabitProps) {
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={onOpenChange} >
         <DialogContent className="sm:max-w-[460px]">
           <DialogHeader>
-            <DialogTitle className={`text-center text-3xl ${GeistMono.className}`}>New Habit</DialogTitle>
+            <DialogTitle className={`text-center text-3xl ${GeistMono.className}`}>Edit Habit</DialogTitle>
           </DialogHeader>
 
           <form onSubmit={handleSubmit}>
@@ -148,7 +155,7 @@ export function AddHabit({ open, onOpenChange }: HabitProps) {
               </div>
             </div>
           <DialogFooter className="mt-1.5">
-            <Button type="submit" className="cursor-pointer" disabled={loading}>{loading ? 'Saving' : 'Save Habit'}</Button>
+            <Button type="submit" className="cursor-pointer" disabled={loading}>{loading ? 'Saving' : 'Update Habit'}</Button>
           </DialogFooter>
           </form>
         </DialogContent>

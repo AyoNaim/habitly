@@ -26,6 +26,7 @@ model Habit {
   title     String
   timezone  String
   emoji     String?
+  imageUrl  String?
   frequency String
   createdAt DateTime   @default(now())
   logs      HabitLog[]

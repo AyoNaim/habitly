@@ -7,13 +7,14 @@ export async function POST(req: Request) {
 
         // console.log("DATABASE_URL =>", process.env.DATABASE_URL)
 
-        const { title, timezone, frequency } = await req.json();
+        const { title, timezone, frequency, imageUrl } = await req.json();
 
         const habit = await prisma.habit.create({
             data: {
                 title,
                 timezone,
                 frequency,
+                imageUrl,
                 userId: '00000000-0000-0000-0000-000000000000'
             }
         });
